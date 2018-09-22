@@ -12,9 +12,22 @@ class Hex():
         self.q = q
         self.r = r
         self.s = s if s is not None else - q - r
-        self.v = v if v is not None else 0
+        self.v = v if v is not None else None
         self.neighbors = []
         assert not (round(q + r + s) != 0), "q + r + s must be 0"
+
+    def __eq__(self, other):
+        return (self.__class__ == other.__class__ and
+                self.q == other.q and
+                self.r == other.r and
+                self.s == other.s and
+                self.v == other.v)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash((self.q, self.r, self.s, self.v))
 
     def set_neighbours(self, board_size):
         self.neighbors = []
@@ -33,7 +46,7 @@ def hex_direction(direction):
 
 
 def hex_add(a, b):
-    return Hex(a.q + b.q, a.r + b.r, a.s + b.s)
+    return Hex(a.q + b.q, a.r + b.r, a.s + b.s, a.v)
 
 
 def hex_neighbor(a, direction):
@@ -41,7 +54,7 @@ def hex_neighbor(a, direction):
 
 
 def hex_subtract(a, b):
-    return Hex(a.q - b.q, a.r - b.r, a.s - b.s)
+    return Hex(a.q - b.q, a.r - b.r, a.s - b.s, a.v)
 
 
 def hex_distance(a, b):
