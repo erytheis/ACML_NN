@@ -34,7 +34,7 @@ def AssignCoords(board_size):
                 hex = hexmath.Hex(i, j)
                 Coords.append(hex)
                 hexmath.set_neighbours(hex)
-                print(len(hex.neighbours))
+                print(len(hex.neighbours()))
                 print(f'q is: {hex.q}  r is: {hex.r} s is:{hex.s}')
 
 ReadTable()
