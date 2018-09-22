@@ -1,6 +1,6 @@
 import hexmath
 
-def ReadTable():
+def InitTable():
     tempArray = []
 
     text_file = open("/Users/erytheis/eclipse-workspace/GameTutorial5/Logfile.txt", "r")
@@ -16,26 +16,18 @@ def ReadTable():
 
     AssignCoords(len(lines))
 
-    print(tempArray)
-
-def isOnBoard(i, j, size):
-    offset = (size - 1) / 2
-    if i + j >= offset and i + j <= 2 * size - offset - 2 and i >= 0 and j >= 0 and i < size and j < size:
-        return True
-    else:
-        return False
-
 
 def AssignCoords(board_size):
     Coords = [[]]
     for i in range(board_size):
         for j in range(board_size):
-            if isOnBoard(i, j, board_size):
-                hex = hexmath.Hex(i, j)
+            if hexmath.isOnBoard(i, j, board_size):
+                hex = hexmath.Hex(i, j, - i - j)
                 Coords.append(hex)
-                hexmath.set_neighbours(hex)
-                print(len(hex.neighbours()))
+                hex.set_neighbours(board_size)
                 print(f'q is: {hex.q}  r is: {hex.r} s is:{hex.s}')
 
-ReadTable()
+
+
+InitTable()
 
