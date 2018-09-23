@@ -29,13 +29,16 @@ class Hex():
     def __hash__(self):
         return hash((self.q, self.r, self.s, self.v))
 
-    def set_neighbours(self, board_size):
-        self.neighbors = []
+    def __iter__(self):
+        return self
+
+    def set_neighbors(self, board):
         for direction in hex_directions:
             n = hex_neighbor(self, direction)
-            if isOnBoard(n.q, n.r, board_size):
-                self.neighbors.append(n)
-        return self.neighbors
+            if isOnBoard(n.q, n.r, len(board)):
+                self.neighbors.append(board[n.q][n.r])
+
+
 
 
 hex_directions = [Hex(1, 0, -1), Hex(1, -1, 0), Hex(0, -1, 1), Hex(-1, 0, 1), Hex(-1, 1, 0), Hex(0, 1, -1)]

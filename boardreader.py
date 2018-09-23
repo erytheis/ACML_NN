@@ -1,6 +1,10 @@
 import hexmath
 from hexmath import isOnBoard
+from functools import reduce
 
+
+currentSet = set()
+totalSet = set()
 
 def InitTable():
     tempArray = []
@@ -10,63 +14,63 @@ def InitTable():
 
     for line in lines:
         line = line.split(',')
-        line = list(map(lambda each: each.replace("[", ""), line))
+        line = list(map(lambda each: each.replace('[', ''), line))
         line = list(map(lambda each: each.replace(']', ''), line))
         line = list(map(lambda each: each.replace("\n", ''), line))
+        line = list(map(lambda each: each.replace(" ", ''), line))
         line = list(map(lambda each: each.replace("null", "None"), line))
         tempArray.append(line)
 
-    table = AssignHexes(len(lines), tempArray)
+
+    hextable = AssignHexes(tempArray)
+    SetNeighbors(hextable)
 
 
-#
-totalSet = set()
-currentSet = set()
+    return hextable
+    #
 
 
-def CreateIsland(hex, size, color):
-    if (isOnBoard(hex.q, hex.r, size)):
-        currentSet.add(hex)
-        for n in hex.neighbors:
-            if n not in currentSet and n.v == color:
-
-                currentSet.add(n)
-                totalSet.add(n)
-
-                tempSet = set(CreateIsland(n, size, color))
-
-                currentSet.update((tempSet))
-                totalSet.update((tempSet))
-                print(len(currentSet))
-
-            else:
-                print("is in current set or different color")
-    return currentSet
+def SetNeighbors(hextable):
+    for line in hextable:
+        for hex in line:
+            if isOnBoard(hex.q, hex.r, len(hextable)):
+                hex.set_neighbors(hextable)
 
 
-def AssignHexes(board_size, table):
+def AssignHexes(table):
     hextable = []
-    hexrow = []
-    for i in range(board_size):
+    for i in range(len(table)):
         hexrow = []
-        for j in range(board_size):
-            if isOnBoard(i, j, board_size):
+        for j in range(len(table)):
                 hex = hexmath.Hex(i, j, - i - j, table[i][j])
                 hexrow.append(hex)
-                hex.set_neighbours(board_size)
-                print(f'q is: {hex.q}  r is: {hex.r} s is: {hex.s}  and type is {hex.v}')
         hextable.append(hexrow)
     return hextable
 
+def CreateRandom(move, boardsize):
+    hextable = InitTable()
 
-InitTable()
+
+# def CreateIsland(hex, board, color):
+#     currentSet = set()
+#     if (isOnBoard(hex.q, hex.r, len(board))):
+#         currentSet.add(hex)
+#         for k, n in enumerate(hex.neighbors):
+#             if n not in totalSet and n.v == color:
+#                 # print('neighbor # ', k, 'has coordinates of ', n.q, n.r, n.s, 'and a color of', n.v)
+#                 totalSet.add(n)
+#                 tempSet = set(CreateIsland(n, board, color))
+#                 currentSet.update(tempSet)
+#                 totalSet.update(tempSet)
+#
+#     return currentSet
 
 
-def CombineIslands(color, board):
-    islandList = []
-    for hex in board:
-        if (isOnBoard(hex.q, hex.r, len(board))):
-            if hex.v == color and hex not in totalSet:
-                currentSet = set()
-                tempSet = CreateIsland(hex, len(board), 'b')
-                islandList.append(tempSet)
+
+
+
+
+
+
+
+# InitTable()
